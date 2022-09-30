@@ -39,20 +39,28 @@ namespace CSharp
                 case JobType.Knight:
                     player.hp = 100;
                     player.power = 10;
+                    Console.WriteLine($"체력 : {player.hp}");
+                    Console.WriteLine($"공격력 : {player.power}");
                     break;
                 case JobType.Archer:
                     player.hp = 75;
                     player.power = 12;
+                    Console.WriteLine($"체력 : {player.hp}");
+                    Console.WriteLine($"공격력 : {player.power}");
                     break;
                 case JobType.Mage:
                     player.hp = 50;
                     player.power = 15;
+                    Console.WriteLine($"체력 : {player.hp}");
+                    Console.WriteLine($"공격력 : {player.power}");
                     break;
                 default:
                     player.hp = 0;
                     player.power = 0;
                     break;
             }
+            Console.WriteLine("스텟 분배가 완료되었습니다!");
+            Console.WriteLine("---------------------------");
         }
 
         static void CreateRandomMonster(out Monster monster) // 몬스터 랜덤 생성 메서드
@@ -125,26 +133,35 @@ namespace CSharp
             while (true)
             {   
                 monster.hp -= player.power; // 플레이어의 공격
-                if (player.hp <= 0)
-                {
-                    PrintBothNowHealth(ref player, ref monster); // 죽었을때 체력 프린트
-                    Console.WriteLine("플레이어가 사망했습니다!");
-                    Console.WriteLine("---------------------------");
-                    isPlayerAlive = false; // 죽었으면 false 반환
-                    break;
-                }
-
-                player.hp -= monster.power; // 몬스터의 반격
-                PrintBothNowHealth(ref player, ref monster); // 한대 주고 받은뒤 체력 프린트
+                Console.WriteLine("플레이어의 공격이 명중했습니다!");
                 if (monster.hp <= 0)
                 {
+                    PrintBothNowHealth(ref player, ref monster); // 몬스터가 죽었을때 결과 체크용 체력 프린트
                     Console.WriteLine("몬스터를 처치했습니다!");
                     isPlayerAlive = true; // 살아있으면 true 반환
                     Console.WriteLine("마을로 복귀합니다!");
                     Console.WriteLine("---------------------------");
                     break;
                 }
+
+                player.hp -= monster.power; // 몬스터의 반격
+                Console.WriteLine("몬스터의 반격이 성공했습니다!");
+                if (player.hp <= 0)
+                {
+                    PrintBothNowHealth(ref player, ref monster); // 죽었을때 결과 체크용 체력 프린트
+                    Console.WriteLine("플레이어가 사망했습니다!");
+                    Console.WriteLine("---------------------------");
+                    isPlayerAlive = false; // 죽었으면 false 반환
+                    break;
+                }
+                PrintBothNowHealth(ref player, ref monster); // 한대 주고 받은뒤 체력 프린트
             }
+        }
+
+        static void checkHP(Player player)
+        {
+            Console.WriteLine($"현재 체력은 {player.hp} 입니다");
+            Console.WriteLine("---------------------------");
         }
 
         static void EnterGame(ref Player player)
@@ -159,7 +176,8 @@ namespace CSharp
 
                 Console.WriteLine("마을에 입장하셨습니다!");
                 Console.WriteLine("[1] 필드로 들어가기");
-                Console.WriteLine("[2] 로비로 돌아가기");
+                Console.WriteLine("[2] 현재 체력 확인");
+                Console.WriteLine("[3] 로비로 돌아가기");
                 string? input = Console.ReadLine();
                 Console.WriteLine("---------------------------");
                 if (input == "1")
@@ -167,6 +185,10 @@ namespace CSharp
                     EnterField(ref player, ref isPlayerAlive); // 필드 입장
                 } 
                 else if (input == "2")
+                {
+                    checkHP(player);
+                }
+                else if (input == "3")
                 {
                     break; // 마을에서 탈출
                 }
