@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CSharp
+namespace CSharpTextRPG
 {
     class Program
     {
